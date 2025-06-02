@@ -13,15 +13,17 @@ export const getAllExercises = async (req, res) => {
 // Crear un nuevo ejercicio
 export const createExercise = async (req, res) => {
     try {
-        const { nombre, series, repeticiones, createdBy } = req.body;
+        console.log("BODY:", req.body); 
+        const { name, sets, reps} = req.body;
         const newExercise = await Exercise.create({
-            nombre,
-            series,
-            repeticiones,
-            createdBy
+            name,
+            sets,
+            repetitions: reps,
+            createdBy: 1  
         });
         res.status(201).json(newExercise);
     } catch (error) {
+        console.error(error);
         res.status(500).json({ message: error.message });
     }
 };
