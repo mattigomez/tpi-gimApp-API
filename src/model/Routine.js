@@ -20,10 +20,6 @@ const Routine = sequelize.define("routine", {
     level: {
         type: DataTypes.ENUM('principiante', 'intermedio', 'avanzado'),
         allowNull: false,
-    },
-    createdBy: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
     }
 }, { timestamps: true });
 
@@ -41,7 +37,5 @@ const RoutineExercise = sequelize.define("routine_exercise", {
 
 Routine.belongsToMany(Exercise, { through: RoutineExercise, as: 'exercises' });
 Exercise.belongsToMany(Routine, { through: RoutineExercise, as: 'routines' });
-Routine.belongsTo(User, { foreignKey: 'createdBy', as: 'profesor' });
-User.hasMany(Routine, { foreignKey: 'createdBy', as: 'rutinas' });
 
 export { Routine, RoutineExercise };
