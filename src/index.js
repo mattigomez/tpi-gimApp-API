@@ -17,6 +17,7 @@ app.use(routineRoutes);
 app.use(userRoutes);
 app.use(exerciseRoutes);
 
+
 async function main() {
   try {
     await sequelize.sync({ alter: true });
@@ -27,5 +28,19 @@ async function main() {
     console.error('Error starting the server:', error);
   }
 }
+
+try {
+  app.use(express.json());
+    app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "*");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    next();
+  });
+  app.listen(PORT);
+  app.use(routineRoutes);
+  app.use(userRoutes);
+  app.use(exerciseRoutes);
+
 
 main();
