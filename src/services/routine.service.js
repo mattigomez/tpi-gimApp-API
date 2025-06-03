@@ -78,8 +78,7 @@ export const createRoutine = async (req, res) => {
                 .map(ex => Exercise.create({
                     name: ex.name,
                     sets: ex.sets,
-                    repetitions: ex.repeticiones,
-                    createdBy: ex.createdBy
+                    repetitions: ex.repetitions
                 }, { transaction }));
 
             const newExercises = await Promise.all(newExercisesPromises);
@@ -117,6 +116,7 @@ export const createRoutine = async (req, res) => {
         
         res.status(201).json(completeRoutine);
     } catch (error) {
+        console.error(error); 
         await transaction.rollback();
         res.status(500).json({ message: error.message });
     }
@@ -163,8 +163,7 @@ export const updateRoutine = async (req, res) => {
                 .map(ex => Exercise.create({
                     name: ex.name,
                     sets: ex.sets,
-                    repetitions: ex.repetitions,
-                    createdBy: ex.createdBy
+                    repetitions: ex.repetitions
                 }, { transaction }));
 
             const newExercises = await Promise.all(newExercisesPromises);

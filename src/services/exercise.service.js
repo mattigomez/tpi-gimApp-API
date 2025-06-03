@@ -14,12 +14,11 @@ export const getAllExercises = async (req, res) => {
 export const createExercise = async (req, res) => {
     try {
         console.log("BODY:", req.body); 
-        const { name, sets, reps} = req.body;
+        const { name, sets, repetitions } = req.body;
         const newExercise = await Exercise.create({
             name,
             sets,
-            repetitions: reps,
-            createdBy: 1  
+            repetitions
         });
         res.status(201).json(newExercise);
     } catch (error) {

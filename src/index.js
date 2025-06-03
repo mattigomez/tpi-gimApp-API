@@ -18,13 +18,12 @@ try {
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
     next();
   });
-  app.listen(PORT);
   app.use(routineRoutes);
   app.use(userRoutes);
   app.use(exerciseRoutes);
 
   await sequelize.sync();
-  
+  app.listen(PORT);
   console.log(`Server is running on port ${PORT}`);
 } catch (error) {
   console.error('Error starting the server:', error);
