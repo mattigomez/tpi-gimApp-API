@@ -5,6 +5,7 @@ import { sequelize } from './db.js';
 import routineRoutes from './routes/routines.routes.js';
 import userRoutes from './routes/user.routes.js';
 import exerciseRoutes from './routes/exercise.routes.js';
+import authRoutes from './routes/auth.routes.js';
 import "./model/Routine.js";
 import "./model/User.js";
 import "./model/Exercise.js";
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use(routineRoutes);
 app.use(userRoutes);
 app.use(exerciseRoutes);
+app.use(authRoutes);
 
 async function main() {
   try {
