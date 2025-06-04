@@ -12,7 +12,7 @@ export const getActiveRoutine = async (req, res) => {
     });
     if (!user)
       return res.status(404).json({ message: "Usuario no encontrado" });
-    res.json(user.activeRoutineId);
+    res.json(user.activeRoutine); // <-- Devuelve el objeto rutina
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

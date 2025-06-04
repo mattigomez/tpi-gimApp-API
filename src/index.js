@@ -9,6 +9,7 @@ import authRoutes from './routes/auth.routes.js';
 import "./model/Routine.js";
 import "./model/User.js";
 import "./model/Exercise.js";
+import "./model/associations.js";
 
 const app = express();
 app.use(cors());
