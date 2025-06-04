@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../db.js";
-import { User } from "./User.js";
+
 
 export const Exercise = sequelize.define("exercise", {
     id: {
@@ -27,5 +27,4 @@ export const Exercise = sequelize.define("exercise", {
 }, { timestamps: true });
 
 // Relación: Un usuario (profesor) crea muchos ejercicios
-Exercise.belongsTo(User, { foreignKey: 'createdBy', as: 'profesor' });
-User.hasMany(Exercise, { foreignKey: 'createdBy', as: 'ejercicios' });
+

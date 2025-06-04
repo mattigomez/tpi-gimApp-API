@@ -8,6 +8,7 @@ import exerciseRoutes from './routes/exercise.routes.js';
 import "./model/Routine.js";
 import "./model/User.js";
 import "./model/Exercise.js";
+import "./model/associations.js";
 
 const app = express();
 app.use(cors());
@@ -16,7 +17,6 @@ app.use(express.json());
 app.use(routineRoutes);
 app.use(userRoutes);
 app.use(exerciseRoutes);
-
 
 async function main() {
   try {
@@ -28,19 +28,5 @@ async function main() {
     console.error('Error starting the server:', error);
   }
 }
-
-try {
-  app.use(express.json());
-    app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "*");
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-    next();
-  });
-  app.listen(PORT);
-  app.use(routineRoutes);
-  app.use(userRoutes);
-  app.use(exerciseRoutes);
-
 
 main();

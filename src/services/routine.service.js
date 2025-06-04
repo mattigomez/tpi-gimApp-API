@@ -56,13 +56,15 @@ export const getRoutineById = async (req, res) => {
 export const createRoutine = async (req, res) => {
     const transaction = await Routine.sequelize.transaction();
     try {
-        const { title, description, level, exercises } = req.body;
+        // Agrega createdBy al destructuring
+        const { title, description, level, createdBy, exercises } = req.body;
         
-        // Crear la rutina
+        // Crear la rutina con createdBy
         const newRoutine = await Routine.create({
             title,
             description,
-            level
+            level,
+            createdBy
         }, { transaction });
         
         // Si hay ejercicios, asociarlos a la rutina
