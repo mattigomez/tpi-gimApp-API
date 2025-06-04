@@ -19,10 +19,6 @@ const Routine = sequelize.define("routine", {
     level: {
         type: DataTypes.ENUM('principiante', 'intermedio', 'avanzado'),
         allowNull: false,
-    },
-    createdBy: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
     }
 }, { timestamps: true });
 
@@ -37,7 +33,6 @@ const RoutineExercise = sequelize.define("routine_exercise", {
         allowNull: false,
     }
 }, { timestamps: false });
-
 
 
 export { Routine, RoutineExercise };

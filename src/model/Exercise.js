@@ -1,7 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../db.js";
 
-
 export const Exercise = sequelize.define("exercise", {
     id: {
         type: DataTypes.INTEGER,
@@ -20,11 +19,4 @@ export const Exercise = sequelize.define("exercise", {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-    createdBy: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    }
 }, { timestamps: true });
-
-// Relación: Un usuario (profesor) crea muchos ejercicios
-
