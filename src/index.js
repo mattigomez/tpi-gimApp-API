@@ -8,7 +8,7 @@ import exerciseRoutes from './routes/exercise.routes.js';
 import "./model/Routine.js";
 import "./model/User.js";
 import "./model/Exercise.js";
-import "./model/associations.js";
+import "./model/Associations.js";
 
 const app = express();
 app.use(cors());
