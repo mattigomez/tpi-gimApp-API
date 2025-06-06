@@ -52,19 +52,15 @@ export const getRoutineById = async (req, res) => {
     }
 };
 
-// Crear una nueva rutina
 export const createRoutine = async (req, res) => {
     const transaction = await Routine.sequelize.transaction();
     try {
-        // Agrega createdBy al destructuring
-        const { title, description, level, createdBy, exercises } = req.body;
+        const { title, description, level, exercises } = req.body;
         
-        // Crear la rutina con createdBy
         const newRoutine = await Routine.create({
             title,
             description,
-            level,
-            createdBy
+            level
         }, { transaction });
         
         // Si hay ejercicios, asociarlos a la rutina
@@ -124,7 +120,6 @@ export const createRoutine = async (req, res) => {
     }
 };
 
-// Actualizar una rutina existente
 export const updateRoutine = async (req, res) => {
     const transaction = await Routine.sequelize.transaction();
     
@@ -139,7 +134,6 @@ export const updateRoutine = async (req, res) => {
             return res.status(404).json({ message: "Rutina no encontrada" });
         }
         
-        // Actualizar los datos básicos de la rutina
         await routine.update({
             title,
             description,
@@ -208,24 +202,23 @@ export const updateRoutine = async (req, res) => {
     }
 };
 
-// Eliminar una rutina
 export const deleteRoutine = async (req, res) => {
     try {
         const { id } = req.params;
-        
         const routine = await Routine.findByPk(id);
         if (!routine) {
             return res.status(404).json({ message: "Rutina no encontrada" });
         }
-        
+
+        await RoutineExercise.destroy({ where: { routineId: id } });
         await routine.destroy();
+
         res.status(204).send();
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-// Obtener ejercicios 
 export const getAllExercises = async (req, res) => {
     try {
         const exercises = await Exercise.findAll();
@@ -235,19 +228,15 @@ export const getAllExercises = async (req, res) => {
     }
 };
 
-// Crear un nuevo ejercicio
 export const createExercise = async (req, res) => {
     try {
-        const { name, description, sets, repetitions, duration, imageUrl, videoUrl } = req.body;
+        const { name, description, sets, repetitions } = req.body;
         
         const newExercise = await Exercise.create({
             name,
             description,
             sets,
-            repetitions, 
-            duration,
-            imageUrl,
-            videoUrl
+            repetitions 
         });
         
         res.status(201).json(newExercise);
