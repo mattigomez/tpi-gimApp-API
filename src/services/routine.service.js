@@ -55,7 +55,8 @@ export const getRoutineById = async (req, res) => {
 export const createRoutine = async (req, res) => {
     const transaction = await Routine.sequelize.transaction();
     try {
-        const { title, description, level, exercises } = req.body;
+
+        const { title, description, level,  exercises } = req.body;
         
         const newRoutine = await Routine.create({
             title,
