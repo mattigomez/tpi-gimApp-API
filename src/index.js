@@ -8,7 +8,7 @@ import exerciseRoutes from './routes/exercise.routes.js';
 import "./model/Routine.js";
 import "./model/User.js";
 import "./model/Exercise.js";
-import "./model/associations.js";
+import "./model/Associations.js";
 
 const app = express();
 app.use(cors());
@@ -20,7 +20,7 @@ app.use(exerciseRoutes);
 
 async function main() {
   try {
-    await sequelize.sync({ alter: true });
+    await sequelize.sync();
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
     });
