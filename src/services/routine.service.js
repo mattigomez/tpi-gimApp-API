@@ -205,13 +205,14 @@ export const updateRoutine = async (req, res) => {
 export const deleteRoutine = async (req, res) => {
     try {
         const { id } = req.params;
-        
         const routine = await Routine.findByPk(id);
         if (!routine) {
             return res.status(404).json({ message: "Rutina no encontrada" });
         }
-        
+
+        await RoutineExercise.destroy({ where: { routineId: id } });
         await routine.destroy();
+
         res.status(204).send();
     } catch (error) {
         res.status(500).json({ message: error.message });
