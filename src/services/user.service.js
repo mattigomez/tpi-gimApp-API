@@ -2,7 +2,7 @@ import { User } from "../model/User.js";
 import { Routine } from "../model/Routine.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
+import { validateEmail, validatePassword } from "../utils/validations.js";
 // Obtener la rutina activa de un usuario
 export const getActiveRoutine = async (req, res) => {
   try {
@@ -70,27 +70,33 @@ export const createUser = async (req, res) => {
   }
 };
 
-export const loginUser= async(req, res) =>{
-    const {email , password} = req.body;
-    console.log("Login intento:", email, password);
+export const loginUser = async (req, res) => {
+  if (!validateLoginUser(req.body))
+    return res.status(400).send({ message: "Hubo un error en la solicitud" });
+  const { email, password } = req.body;
+  console.log("Login intento:", email, password);
 
-    const user = await User.findOne({ where: { email } });
-    if (!user) {
-      console.log("No existe usuario:", email);
-      return res.status(401).send({ message: "Usuario no existente" });
-    }
-    const comparison = await bcrypt.compare(password, user.password);
-    if(!comparison) {
-      console.log("Contraseña incorrecta para:", email);
-      return res.status(401).send({ message: "Email y/o contraseña incorrecta" });
-    }
-    //Generate token
-    const secretKey = 'GymHub-2025';
+  const user = await User.findOne({ where: { email } });
+  if (!user) {
+    console.log("No existe usuario:", email);
+    return res.status(401).send({ message: "Usuario no existente" });
+  }
+  const comparison = await bcrypt.compare(password, user.password);
+  if (!comparison) {
+    console.log("Contraseña incorrecta para:", email);
+    return res.status(401).send({ message: "Email y/o contraseña incorrecta" });
+  }
+  //Generate token
+  const secretKey = "GymHub-2025";
 
-    const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, secretKey, { expiresIn: '1h' });
+  const token = jwt.sign(
+    { id: user.id, email: user.email, role: user.role },
+    secretKey,
+    { expiresIn: "1h" }
+  );
 
-    return res.json(token)
-}
+  return res.json(token);
+};
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -134,4 +140,11 @@ export const deleteUser = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
+};
+
+const validateLoginUser = ({ email, password }) => {
+  if (!validateEmail(email)) return false;
+  else if (!validatePassword(password, 6, 20, true, true)) return false;
+
+  return true;
 };
