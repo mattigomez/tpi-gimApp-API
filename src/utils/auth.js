@@ -8,7 +8,7 @@ export const verifyToken = (req, res, next) => {
 
     try {
         const payload = jwt.verify(token, "GymHub-2025");
-        console.log(payload)
+        req.user = payload;
         next();
     } catch (error) {
         return res.status(401).send({ message: "No posee permisos correctos" })
