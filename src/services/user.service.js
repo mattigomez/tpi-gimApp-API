@@ -12,7 +12,7 @@ export const getActiveRoutine = async (req, res) => {
     });
     if (!user)
       return res.status(404).json({ message: "Usuario no encontrado" });
-    res.json(user.activeRoutine); // <-- Devuelve el objeto rutina
+    res.json(user.activeRoutine);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -38,7 +38,9 @@ export const setActiveRoutine = async (req, res) => {
 };
 
 export const createUser = async (req, res) => {
-  try {
+  if (!validateRegisterUser(req.body))
+    return res.status(400).send({ message: "Hubo un error en la solicitud" });
+
     const { email, password, role, nombre, peso, estatura, edad, telefono } =
       req.body;
 
@@ -65,16 +67,12 @@ export const createUser = async (req, res) => {
       telefono,
     });
     res.status(201).json(newUser);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
 };
 
 export const loginUser = async (req, res) => {
   if (!validateLoginUser(req.body))
     return res.status(400).send({ message: "Hubo un error en la solicitud" });
   const { email, password } = req.body;
-  console.log("Login intento:", email, password);
 
   const user = await User.findOne({ where: { email } });
   if (!user) {
@@ -143,6 +141,13 @@ export const deleteUser = async (req, res) => {
 };
 
 const validateLoginUser = ({ email, password }) => {
+  if (!validateEmail(email)) return false;
+  else if (!validatePassword(password, 6, 20, true, true)) return false;
+
+  return true;
+};
+
+const validateRegisterUser = ({ email, password }) => {
   if (!validateEmail(email)) return false;
   else if (!validatePassword(password, 6, 20, true, true)) return false;
 
