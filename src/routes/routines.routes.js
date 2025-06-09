@@ -10,7 +10,6 @@ import { verifyToken } from "../utils/auth.js";
 
 const router = Router();
 
-// Rutas para rutinas
 router.get("/routines",verifyToken, getAllRoutines);
 router.get("/routines/:id",verifyToken, getRoutineById);
 router.post("/routines",verifyToken, createRoutine);

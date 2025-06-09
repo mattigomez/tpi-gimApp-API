@@ -3,7 +3,7 @@ import { Routine } from "../model/Routine.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { validateEmail, validatePassword } from "../utils/validations.js";
-// Obtener la rutina activa de un usuario
+
 export const getActiveRoutine = async (req, res) => {
   try {
     const { id } = req.params;
@@ -18,7 +18,6 @@ export const getActiveRoutine = async (req, res) => {
   }
 };
 
-// Cambiar la rutina activa de un usuario
 export const setActiveRoutine = async (req, res) => {
   try {
     const { id } = req.params;
@@ -84,7 +83,6 @@ export const loginUser = async (req, res) => {
     console.log("Contraseña incorrecta para:", email);
     return res.status(401).send({ message: "Email y/o contraseña incorrecta" });
   }
-  //Generate token
   const secretKey = "GymHub-2025";
 
   const token = jwt.sign(
@@ -165,11 +163,9 @@ export const changePassword = async (req, res) => {
     const user = await User.findByPk(id);
     if (!user) return res.status(404).json({ message: "Usuario no encontrado" });
 
-    // Verificar contraseña actual
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) return res.status(400).json({ message: "Contraseña actual incorrecta" });
 
-    // Hashear y guardar la nueva contraseña
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
     user.password = hashedPassword;
