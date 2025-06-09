@@ -90,7 +90,7 @@ export const loginUser = async (req, res) => {
   const secretKey = "GymHub-2025";
 
   const token = jwt.sign(
-    { id: user.id, email: user.email, role: user.role },
+    { id: user.id, email: user.email, role: user.role, activeRoutineId: user.activeRoutineId },
     secretKey,
     { expiresIn: "1h" }
   );
