@@ -1,7 +1,6 @@
 import { Routine, RoutineExercise } from "../model/Routine.js";
 import { Exercise } from "../model/Exercise.js";
 
-// Obtener todas las rutinas con sus ejercicios
 export const getAllRoutines = async (req, res) => {
     try {
         const routines = await Routine.findAll({
@@ -24,7 +23,6 @@ export const getAllRoutines = async (req, res) => {
     }
 };
 
-// Obtener una rutina específica por ID
 export const getRoutineById = async (req, res) => {
     try {
         const { id } = req.params;
@@ -64,14 +62,11 @@ export const createRoutine = async (req, res) => {
             level
         }, { transaction });
         
-        // Si hay ejercicios, asociarlos a la rutina
         if (exercises && exercises.length > 0) {
-            // Obtener IDs de los ejercicios que ya existen
             const existingExercisesIds = exercises
                 .filter(ex => ex.id)
                 .map(ex => ex.id);
 
-            // Crear nuevos ejercicios si es necesario
             const newExercisesPromises = exercises
                 .filter(ex => !ex.id)
                 .map(ex => Exercise.create({
@@ -83,10 +78,8 @@ export const createRoutine = async (req, res) => {
             const newExercises = await Promise.all(newExercisesPromises);
             const newExercisesIds = newExercises.map(ex => ex.id);
 
-            // Combinar todos los IDs de ejercicios
             const allExerciseIds = [...existingExercisesIds, ...newExercisesIds];
 
-            // Asociar ejercicios a la rutina con su orden correspondiente
             for (let i = 0; i < allExerciseIds.length; i++) {
                 await RoutineExercise.create({
                     routineId: newRoutine.id,
@@ -98,7 +91,6 @@ export const createRoutine = async (req, res) => {
         
         await transaction.commit();
         
-        // Obtener la rutina completa con ejercicios para devolverla en la respuesta
         const completeRoutine = await Routine.findOne({
             where: { id: newRoutine.id },
             include: [{
@@ -128,7 +120,6 @@ export const updateRoutine = async (req, res) => {
         const { id } = req.params;
         const { title, description, level, exercises } = req.body;
         
-        // Verificar si la rutina existe
         const routine = await Routine.findByPk(id);
         if (!routine) {
             await transaction.rollback();
@@ -141,20 +132,16 @@ export const updateRoutine = async (req, res) => {
             level
         }, { transaction });
         
-        // Si hay ejercicios, actualizar las asociaciones
         if (exercises && exercises.length > 0) {
-            // Eliminar todas las asociaciones actuales
             await RoutineExercise.destroy({
                 where: { routineId: id },
                 transaction
             });
 
-            // Obtener IDs de los ejercicios que ya existen
             const existingExercisesIds = exercises
                 .filter(ex => ex.id)
                 .map(ex => ex.id);
 
-            // Crear nuevos ejercicios si es necesario
             const newExercisesPromises = exercises
                 .filter(ex => !ex.id)
                 .map(ex => Exercise.create({
@@ -166,10 +153,8 @@ export const updateRoutine = async (req, res) => {
             const newExercises = await Promise.all(newExercisesPromises);
             const newExercisesIds = newExercises.map(ex => ex.id);
 
-            // Combinar todos los IDs de ejercicios
             const allExerciseIds = [...existingExercisesIds, ...newExercisesIds];
 
-            // Asociar ejercicios a la rutina con su orden correspondiente
             for (let i = 0; i < allExerciseIds.length; i++) {
                 await RoutineExercise.create({
                     routineId: id,
@@ -181,7 +166,6 @@ export const updateRoutine = async (req, res) => {
         
         await transaction.commit();
         
-        // Obtener la rutina actualizada con ejercicios para devolverla en la respuesta
         const updatedRoutine = await Routine.findOne({
             where: { id },
             include: [{

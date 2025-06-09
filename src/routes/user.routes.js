@@ -3,7 +3,7 @@ import { createUser, deleteUser, getActiveRoutine, getAllUsers, getUserById, set
 import { verifyToken } from "../utils/auth.js";
 
 const router = Router();
-// Rutas para partners
+
 router.get("/partners/:id/active-routine",verifyToken, getActiveRoutine);
 router.put("/partners/:id/active-routine",verifyToken, setActiveRoutine);
 router.post("/partners", createUser);
