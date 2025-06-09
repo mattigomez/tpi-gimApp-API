@@ -153,3 +153,30 @@ const validateRegisterUser = ({ email, password }) => {
 
   return true;
 };
+export const changePassword = async (req, res) => {
+  const { id } = req.params;
+  const { password, newPassword } = req.body;
+
+  if (!validatePassword(newPassword, 6, 20, true, true)) {
+    return res.status(400).json({ message: "Nueva contraseña inválida" });
+  }
+
+  try {
+    const user = await User.findByPk(id);
+    if (!user) return res.status(404).json({ message: "Usuario no encontrado" });
+
+    // Verificar contraseña actual
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) return res.status(400).json({ message: "Contraseña actual incorrecta" });
+
+    // Hashear y guardar la nueva contraseña
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+    user.password = hashedPassword;
+    await user.save();
+
+    res.json({ message: "Contraseña actualizada correctamente" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
